@@ -49,19 +49,19 @@ const numberCardPattern = {
       mask: "000 0000 0000 0000",
       regex: /^(5[1-5]\d{0,2}|22[2-9]\d{0,1}|2[3-7]\d{0,2})\d{0,12}/,
       cardType: "master",
-    },    
+    },
+    {
+      mask: "000 0000 0000 0000",
+      cardType: "default",
+    },
   ],
+  dispatch: function (appended, dynamicMasked) {
+    const number = (dynamicMasked.value + appended).replace(/\D/g, "")
+    const foundMask = dynamicMasked.compiledMasks.find(function(item) {
+        return number.match(item.regex)
+    }) 
+    
+    return foundMask
+  },
 }
-
 const numberCardSet = IMask(numberCard, numberCardPattern)
-
-
-
-
-
-
-
-
-
-
-
