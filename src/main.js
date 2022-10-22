@@ -6,36 +6,36 @@ const ccBgColor02 = document.querySelector(".cc-bg svg > g g:nth-child(2) path")
 const ccLogo = document.querySelector(".cc-logo span:nth-child(2) img")
 
 function setCardType(type) {
-    const colors = {
-        "visa": ["#2D57F2", "#436D99", "#AF1DE2"],
-        "mastercard": ["#C69347", "#DF6F29", "#DF2929"],
-        "default": ["black", "gray"],
-    }
-    
-    ccBgColor01.setAttribute("fill", colors[type] [0] )
-    ccBgColor02.setAttribute("fill", colors[type] [1] )
-    ccBgColor02.setAttribute("fill", colors[type] [2] )
-    ccLogo.setAttribute("src",`cc-${type}.svg`)
+  const colors = {
+    visa: ["#2D57F2", "#436D99", "#AF1DE2"],
+    mastercard: ["#C69347", "#DF6F29", "#DF2929"],
+    default: ["black", "gray"],
+  }
+
+  ccBgColor01.setAttribute("fill", colors[type][0])
+  ccBgColor02.setAttribute("fill", colors[type][1])
+  ccBgColor02.setAttribute("fill", colors[type][2])
+  ccLogo.setAttribute("src", `cc-${type}.svg`)
 }
 
-setCardType("visa")
-// globalThis.setCardType = setCardType
+// setCardType("default")
+globalThis.setCardType = setCardType
 
 // Código de segurança
 const cvcSecurity = document.getElementById("security-code")
 const securityCodePattern = {
-    mask: "0000"
+  mask: "0000",
 }
 const securityCodeMasked = IMask(cvcSecurity, securityCodePattern)
 
 // Datava de validade do cartão
 const expirationDate = document.getElementById("expiration-date")
 const expirationDatePattern = {
-    mask: "00{/}00"
+  mask: "00{/}00",
 }
 const expirationDateValidate = IMask(expirationDate, expirationDatePattern)
 
-// Nímero do caortão Visa
+// Nímero do cartão Visa
 
 const numberCard = document.getElementById("card-number")
 const numberCardPattern = {
@@ -57,23 +57,60 @@ const numberCardPattern = {
   ],
   dispatch: function (appended, dynamicMasked) {
     const number = (dynamicMasked.value + appended).replace(/\D/g, "")
-    const foundMask = dynamicMasked.compiledMasks.find(function(item) {
-        return number.match(item.regex)
-    }) 
-    
+    const foundMask = dynamicMasked.compiledMasks.find(function (item) {
+      return number.match(item.regex)
+    })
+
     return foundMask
   },
 }
 const numberCardSet = IMask(numberCard, numberCardPattern)
 
 const addCard = document.getElementById("add-card")
-addCard.addEventListener("click", () => {  
-  console.log("Opa você clicou no botão!")
+addCard.addEventListener("click", () => {
+  alert("Cartão adicionado com sucesso!")
 })
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault()
 })
 
+// Validação de dados
 
+const cardHolder = document.getElementById("card-holder")
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+  console.log(cardHolder.value.length)
 
+  ccHolder.innerText =
+    cardHolder.value.length === 0 ? "LOBÃO DEV" : cardHolder.value
+})
+
+securityCodeMasked.on("accept", () => {
+  updateScurityCode(securityCodeMasked.value)
+})
+
+function updateScurityCode(code) {
+  const cvcSecurity = document.querySelector(".cc-security .value")
+
+  cvcSecurity.innerText = code.Length === 0 ? "123" : code
+}
+
+numberCardSet.on("accept", () => {
+  const cardType = numberCardSet.masked.currentMask.cardType
+  setCardType(cardType)
+  updateCardNumber(numberCardSet.value)
+})
+function updateCardNumber(number) {
+  const ccNumber = document.querySelector(".cc-number")
+  ccNumber.innerText = number.length
+   === 0 ? "1234 5678 9012 3456" : number
+}
+expirationDateValidate.on("accept", () => {
+  updateExpirationDate(expirationDateValidate.value)
+})
+
+function updateExpirationDate(date) {
+  const ccExpiration = document.querySelector(".cc-extra .value")
+  ccExpiration.innerText = date.length === 0 ? "12/32" : date
+}

@@ -15,7 +15,7 @@ form label {
   font-size: 1.2rem;
   line-height: 1.5rem;
   letter-spacing: 0.01px;
-  /* text-transform: capitalize; */
+  text-transform: uppercase;
   color: #e1e1e6;
 }
 
@@ -29,7 +29,7 @@ form input {
   width: 100%;
 
   color: white;
-  /* text-transform: capitalize; */
+  text-transform: uppercase;
 }
 
 form .flex {
